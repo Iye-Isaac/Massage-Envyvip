@@ -4,15 +4,36 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Spinner } from "@/components/ui/spinner"
-import { Clock, CheckCircle2 } from "lucide-react"
+import { Clock, CheckCircle2, ChevronDown } from "lucide-react"
 import { AnimateOnScroll } from "@/components/animate-on-scroll"
+
+const locations = [
+  { value: "new-york", label: "New York" },
+  { value: "los-angeles", label: "Los Angeles" },
+  { value: "chicago", label: "Chicago" },
+  { value: "houston", label: "Houston" },
+  { value: "miami", label: "Miami" },
+]
+
+const countryCodes = [
+  { code: "+1", country: "US", flag: "🇺🇸" },
+  { code: "+44", country: "UK", flag: "🇬🇧" },
+  { code: "+234", country: "NG", flag: "🇳🇬" },
+  { code: "+91", country: "IN", flag: "🇮🇳" },
+  { code: "+61", country: "AU", flag: "🇦🇺" },
+  { code: "+49", country: "DE", flag: "🇩🇪" },
+  { code: "+33", country: "FR", flag: "🇫🇷" },
+  { code: "+86", country: "CN", flag: "🇨🇳" },
+]
 
 export function ContactSection() {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
+    countryCode: "+1",
     phone: "",
+    location: "",
     message: ""
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -38,7 +59,7 @@ export function ContactSection() {
       }
 
       setSubmitStatus("success")
-      setFormData({ firstName: "", lastName: "", email: "", phone: "", message: "" })
+      setFormData({ firstName: "", lastName: "", email: "", countryCode: "+1", phone: "", location: "", message: "" })
     } catch (error) {
       setSubmitStatus("error")
       setErrorMessage(error instanceof Error ? error.message : "Something went wrong")
@@ -132,12 +153,50 @@ export function ContactSection() {
                   <label className="text-xs uppercase tracking-wider text-muted-foreground mb-2 block transition-colors duration-300 group-focus-within:text-primary">
                     Phone
                   </label>
-                  <Input
-                    type="tel"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                    className="bg-card border-border transition-all duration-300 focus:scale-[1.01]"
-                  />
+                  <div className="flex gap-2">
+                    <div className="relative">
+                      <select
+                        value={formData.countryCode}
+                        onChange={(e) => setFormData({...formData, countryCode: e.target.value})}
+                        className="appearance-none h-10 pl-3 pr-8 bg-card border border-border rounded-md text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-all duration-300 cursor-pointer"
+                      >
+                        {countryCodes.map((country) => (
+                          <option key={country.code} value={country.code}>
+                            {country.flag} {country.code}
+                          </option>
+                        ))}
+                      </select>
+                      <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+                    </div>
+                    <Input
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                      placeholder="Phone number"
+                      className="flex-1 bg-card border-border transition-all duration-300 focus:scale-[1.01]"
+                    />
+                  </div>
+                </div>
+
+                <div className="group">
+                  <label className="text-xs uppercase tracking-wider text-muted-foreground mb-2 block transition-colors duration-300 group-focus-within:text-primary">
+                    Preferred Location
+                  </label>
+                  <div className="relative">
+                    <select
+                      value={formData.location}
+                      onChange={(e) => setFormData({...formData, location: e.target.value})}
+                      className="appearance-none w-full h-10 px-3 pr-10 bg-card border border-border rounded-md text-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all duration-300 cursor-pointer"
+                    >
+                      <option value="">Select a location</option>
+                      {locations.map((loc) => (
+                        <option key={loc.value} value={loc.value}>
+                          {loc.label}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+                  </div>
                 </div>
 
                 <div className="group">
