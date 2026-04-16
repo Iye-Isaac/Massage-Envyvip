@@ -1,3 +1,7 @@
+"use client"
+
+import { AnimateOnScroll } from "@/components/animate-on-scroll"
+
 const team = [
   {
     name: "Sarah Mitchell",
@@ -23,7 +27,7 @@ export function TeamSection() {
   return (
     <section id="team" className="py-24 bg-secondary">
       <div className="container mx-auto px-6">
-        <div className="text-center max-w-2xl mx-auto mb-16">
+        <AnimateOnScroll className="text-center max-w-2xl mx-auto mb-16">
           <p className="text-sm tracking-[0.3em] uppercase text-muted-foreground mb-4">
             Meet The Team
           </p>
@@ -34,30 +38,35 @@ export function TeamSection() {
             Our certified therapists are passionate about helping you feel your best. 
             Each brings unique skills and specializations to our practice.
           </p>
-        </div>
+        </AnimateOnScroll>
 
         <div className="grid md:grid-cols-3 gap-8">
-          {team.map((member) => (
-            <div key={member.name} className="group">
-              <div 
-                className="aspect-[3/4] bg-cover bg-center rounded-lg mb-6 overflow-hidden"
-                style={{ backgroundImage: `url('${member.image}')` }}
-              >
-                <div className="w-full h-full bg-primary/0 group-hover:bg-primary/10 transition-colors duration-300" />
+          {team.map((member, index) => (
+            <AnimateOnScroll key={member.name} animation="scale" delay={index * 150}>
+              <div className="group cursor-pointer">
+                <div 
+                  className="aspect-[3/4] bg-cover bg-center rounded-lg mb-6 overflow-hidden relative"
+                  style={{ backgroundImage: `url('${member.image}')` }}
+                >
+                  <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-all duration-500" />
+                  <div className="absolute inset-0 scale-100 group-hover:scale-110 transition-transform duration-700 bg-cover bg-center"
+                    style={{ backgroundImage: `url('${member.image}')` }}
+                  />
+                </div>
+                <h3 className="font-serif text-xl text-foreground mb-1 transition-colors duration-300 group-hover:text-primary">{member.name}</h3>
+                <p className="text-sm text-muted-foreground mb-3">{member.role}</p>
+                <div className="flex flex-wrap gap-2">
+                  {member.specialties.map((specialty) => (
+                    <span 
+                      key={specialty}
+                      className="text-xs px-3 py-1 bg-background rounded-full text-muted-foreground transition-all duration-300 hover:bg-primary hover:text-primary-foreground"
+                    >
+                      {specialty}
+                    </span>
+                  ))}
+                </div>
               </div>
-              <h3 className="font-serif text-xl text-foreground mb-1">{member.name}</h3>
-              <p className="text-sm text-muted-foreground mb-3">{member.role}</p>
-              <div className="flex flex-wrap gap-2">
-                {member.specialties.map((specialty) => (
-                  <span 
-                    key={specialty}
-                    className="text-xs px-3 py-1 bg-background rounded-full text-muted-foreground"
-                  >
-                    {specialty}
-                  </span>
-                ))}
-              </div>
-            </div>
+            </AnimateOnScroll>
           ))}
         </div>
       </div>

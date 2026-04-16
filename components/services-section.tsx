@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { ChevronDown } from "lucide-react"
+import { AnimateOnScroll } from "@/components/animate-on-scroll"
 
 const services = [
   {
@@ -42,7 +43,7 @@ export function ServicesSection() {
   return (
     <section id="services" className="py-24 bg-card">
       <div className="container mx-auto px-6">
-        <div className="max-w-2xl mb-16">
+        <AnimateOnScroll className="max-w-2xl mb-16">
           <p className="text-sm tracking-[0.3em] uppercase text-muted-foreground mb-4">
             What We Offer
           </p>
@@ -53,44 +54,46 @@ export function ServicesSection() {
             Each treatment is thoughtfully designed to address your unique needs, 
             combining skilled techniques with premium natural products.
           </p>
-        </div>
+        </AnimateOnScroll>
 
         <div className="border-t border-border">
           {services.map((service, index) => (
-            <div key={service.title} className="border-b border-border">
-              <button
-                onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full py-6 flex items-center justify-between text-left group"
-              >
-                <h3 className="font-serif text-xl md:text-2xl text-foreground group-hover:text-primary transition-colors">
-                  {service.title}
-                </h3>
-                <ChevronDown 
-                  className={`w-5 h-5 text-muted-foreground transition-transform duration-300 ${
-                    openIndex === index ? "rotate-180" : ""
+            <AnimateOnScroll key={service.title} delay={index * 100}>
+              <div className="border-b border-border">
+                <button
+                  onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                  className="w-full py-6 flex items-center justify-between text-left group"
+                >
+                  <h3 className="font-serif text-xl md:text-2xl text-foreground group-hover:text-primary transition-colors duration-300">
+                    {service.title}
+                  </h3>
+                  <ChevronDown 
+                    className={`w-5 h-5 text-muted-foreground transition-transform duration-300 ${
+                      openIndex === index ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                <div
+                  className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                    openIndex === index ? "max-h-48 pb-6 opacity-100" : "max-h-0 opacity-0"
                   }`}
-                />
-              </button>
-              <div
-                className={`overflow-hidden transition-all duration-300 ${
-                  openIndex === index ? "max-h-48 pb-6" : "max-h-0"
-                }`}
-              >
-                <div className="grid md:grid-cols-3 gap-4">
-                  <p className="text-muted-foreground md:col-span-2">
-                    {service.description}
-                  </p>
-                  <div className="flex md:flex-col gap-4 md:gap-2 text-sm">
-                    <span className="text-muted-foreground">
-                      <span className="text-foreground font-medium">Duration:</span> {service.duration}
-                    </span>
-                    <span className="text-muted-foreground">
-                      <span className="text-foreground font-medium">Price:</span> {service.price}
-                    </span>
+                >
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <p className="text-muted-foreground md:col-span-2">
+                      {service.description}
+                    </p>
+                    <div className="flex md:flex-col gap-4 md:gap-2 text-sm">
+                      <span className="text-muted-foreground">
+                        <span className="text-foreground font-medium">Duration:</span> {service.duration}
+                      </span>
+                      <span className="text-muted-foreground">
+                        <span className="text-foreground font-medium">Price:</span> {service.price}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </AnimateOnScroll>
           ))}
         </div>
       </div>
