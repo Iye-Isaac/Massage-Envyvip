@@ -4,15 +4,82 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Spinner } from "@/components/ui/spinner"
-import { Clock, CheckCircle2 } from "lucide-react"
+import { Clock, CheckCircle2, ChevronDown } from "lucide-react"
 import { AnimateOnScroll } from "@/components/animate-on-scroll"
+
+const locations = [
+  { value: "AL", label: "Alabama" },
+  { value: "AK", label: "Alaska" },
+  { value: "AZ", label: "Arizona" },
+  { value: "AR", label: "Arkansas" },
+  { value: "CA", label: "California" },
+  { value: "CO", label: "Colorado" },
+  { value: "CT", label: "Connecticut" },
+  { value: "DE", label: "Delaware" },
+  { value: "FL", label: "Florida" },
+  { value: "GA", label: "Georgia" },
+  { value: "HI", label: "Hawaii" },
+  { value: "ID", label: "Idaho" },
+  { value: "IL", label: "Illinois" },
+  { value: "IN", label: "Indiana" },
+  { value: "IA", label: "Iowa" },
+  { value: "KS", label: "Kansas" },
+  { value: "KY", label: "Kentucky" },
+  { value: "LA", label: "Louisiana" },
+  { value: "ME", label: "Maine" },
+  { value: "MD", label: "Maryland" },
+  { value: "MA", label: "Massachusetts" },
+  { value: "MI", label: "Michigan" },
+  { value: "MN", label: "Minnesota" },
+  { value: "MS", label: "Mississippi" },
+  { value: "MO", label: "Missouri" },
+  { value: "MT", label: "Montana" },
+  { value: "NE", label: "Nebraska" },
+  { value: "NV", label: "Nevada" },
+  { value: "NH", label: "New Hampshire" },
+  { value: "NJ", label: "New Jersey" },
+  { value: "NM", label: "New Mexico" },
+  { value: "NY", label: "New York" },
+  { value: "NC", label: "North Carolina" },
+  { value: "ND", label: "North Dakota" },
+  { value: "OH", label: "Ohio" },
+  { value: "OK", label: "Oklahoma" },
+  { value: "OR", label: "Oregon" },
+  { value: "PA", label: "Pennsylvania" },
+  { value: "RI", label: "Rhode Island" },
+  { value: "SC", label: "South Carolina" },
+  { value: "SD", label: "South Dakota" },
+  { value: "TN", label: "Tennessee" },
+  { value: "TX", label: "Texas" },
+  { value: "UT", label: "Utah" },
+  { value: "VT", label: "Vermont" },
+  { value: "VA", label: "Virginia" },
+  { value: "WA", label: "Washington" },
+  { value: "WV", label: "West Virginia" },
+  { value: "WI", label: "Wisconsin" },
+  { value: "WY", label: "Wyoming" },
+  { value: "DC", label: "Washington D.C." },
+]
+
+const countryCodes = [
+  { code: "+1", country: "US", flag: "🇺🇸" },
+  { code: "+44", country: "UK", flag: "🇬🇧" },
+  { code: "+234", country: "NG", flag: "🇳🇬" },
+  { code: "+91", country: "IN", flag: "🇮🇳" },
+  { code: "+61", country: "AU", flag: "🇦🇺" },
+  { code: "+49", country: "DE", flag: "🇩🇪" },
+  { code: "+33", country: "FR", flag: "🇫🇷" },
+  { code: "+86", country: "CN", flag: "🇨🇳" },
+]
 
 export function ContactSection() {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
+    countryCode: "+1",
     phone: "",
+    location: "",
     message: ""
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -38,7 +105,7 @@ export function ContactSection() {
       }
 
       setSubmitStatus("success")
-      setFormData({ firstName: "", lastName: "", email: "", phone: "", message: "" })
+      setFormData({ firstName: "", lastName: "", email: "", countryCode: "+1", phone: "", location: "", message: "" })
     } catch (error) {
       setSubmitStatus("error")
       setErrorMessage(error instanceof Error ? error.message : "Something went wrong")
@@ -132,12 +199,50 @@ export function ContactSection() {
                   <label className="text-xs uppercase tracking-wider text-muted-foreground mb-2 block transition-colors duration-300 group-focus-within:text-primary">
                     Phone
                   </label>
-                  <Input
-                    type="tel"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                    className="bg-card border-border transition-all duration-300 focus:scale-[1.01]"
-                  />
+                  <div className="flex gap-2">
+                    <div className="relative">
+                      <select
+                        value={formData.countryCode}
+                        onChange={(e) => setFormData({...formData, countryCode: e.target.value})}
+                        className="appearance-none h-10 pl-3 pr-8 bg-card border border-border rounded-md text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-all duration-300 cursor-pointer"
+                      >
+                        {countryCodes.map((country) => (
+                          <option key={country.code} value={country.code}>
+                            {country.flag} {country.code}
+                          </option>
+                        ))}
+                      </select>
+                      <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+                    </div>
+                    <Input
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                      placeholder="Phone number"
+                      className="flex-1 bg-card border-border transition-all duration-300 focus:scale-[1.01]"
+                    />
+                  </div>
+                </div>
+
+                <div className="group">
+                  <label className="text-xs uppercase tracking-wider text-muted-foreground mb-2 block transition-colors duration-300 group-focus-within:text-primary">
+                    State
+                  </label>
+                  <div className="relative">
+                    <select
+                      value={formData.location}
+                      onChange={(e) => setFormData({...formData, location: e.target.value})}
+                      className="appearance-none w-full h-10 px-3 pr-10 bg-card border border-border rounded-md text-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all duration-300 cursor-pointer"
+                    >
+                      <option value="">Select a state</option>
+                      {locations.map((loc) => (
+                        <option key={loc.value} value={loc.value}>
+                          {loc.label}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+                  </div>
                 </div>
 
                 <div className="group">

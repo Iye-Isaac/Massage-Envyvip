@@ -24,10 +24,10 @@ const services = [
     price: "$145"
   },
   {
-    title: "Aromatherapy",
-    description: "Combines gentle massage with essential oils tailored to your needs—whether calming, energizing, or healing.",
-    duration: "60 / 90 min",
-    price: "$105 / $145"
+    title: "Body-to-Body Massage",
+    description: "A sensual massage experience where the therapist uses their entire body to rub and glide over yours intimately, typically with warm oil for a deeply relaxing and connecting experience.",
+    duration: "60 min",
+    price: "$200"
   },
   {
     title: "Prenatal Massage",
